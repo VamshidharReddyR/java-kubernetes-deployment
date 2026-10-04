@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: java-kubernetes-app
+  namespace: devops-demo
+  labels:
+    app: java-kubernetes-app
+spec:
+  replicas: 2
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+
+  selector:
+    matchLabels:
+      app: java-kubernetes-app
+
+  template:
+    metadata:
+      labels:
+        app: java-kubernetes-app
+
+    spec:
+      containers:
+        - name: java-kubernetes-app
+          image: java-kubernetes-deployment:1.0.0
+          imagePullPolicy: IfNotPresent
+
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 20
+            periodSeconds: 10
+
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 20
+
+          envFrom:
+            - configMapRef:
+                name: java-kubernetes-config
+            - secretRef:
+                name: java-kubernetes-secret
+
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1001
+            allowPrivilegeEscalation: false

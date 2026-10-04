@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: java-kubernetes-service
+  namespace: devops-demo
+  labels:
+    app: java-kubernetes-app
+spec:
+  type: ClusterIP
+  selector:
+    app: java-kubernetes-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
