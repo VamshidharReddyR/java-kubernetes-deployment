@@ -1,0 +1,25 @@
+# Maven
+target/
+*.jar
+
+# Java
+*.class
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Environment files
+.env
+.env.*
+
+# Kubernetes local files
+*.secret.yaml
